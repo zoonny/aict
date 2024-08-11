@@ -248,7 +248,7 @@ JWT는 현대 웹 애플리케이션에서 사용자 인증과 정보 교환에 
 
 참고 URL
 
-![DB1](https://drive.google.com/file/d/17iJtjBjEv5zafGK9IdJoVpRXKzEk3a-Q/view?usp=sharing))
+!(https://drive.google.com/file/d/17iJtjBjEv5zafGK9IdJoVpRXKzEk3a-Q/view?usp=sharing))
 
 ### 예약 처리 프로세스와 데이터 모델에서 발생하고 있는 동시성 이슈의 해결 방안 제시
 
