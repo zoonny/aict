@@ -242,23 +242,50 @@ JWT는 현대 웹 애플리케이션에서 사용자 인증과 정보 교환에 
 
 ## A고객사 비즈니스 유연성과 성능 관점에서 상품을 관리하기 위한 데이터 모델을 새롭게 설계하고 설계 사유 제시
 
-- 상품 기본
-- 
-
 참고 URL
 
 [DB1](https://drive.google.com/file/d/1m2t3cWKuaFApxZtnlIJeD6dc3GYxBEN8/view?usp=drive_link)
 
+- 상품기본
+- 상품이력
+- 프로모션상품관계
+- 프로모션기본
+- 프로모션할인상세
+
 [DB2](https://drive.google.com/file/d/1cQLDZtDha-UTGdN6D0h6tV9oRMdhPB0H/view?usp=drive_link)
+
+- 프로모션조건상세
+- 상품권한관계
+- 상품매핑기본
 
 [DB3](https://drive.google.com/file/d/15iN7GX4DqXTdIJI9qVf3E3zOwqdS-_Ed/view?usp=drive_link)
 
+- 상품단위서비스관계
+- 요율계획상세
+- 종량요율상세
+- 상품단위서비스파라미터상세
+- 요율상세
+- 요율파라미터상세
+- 단위서비스기본 ???
+
 [DB4](https://drive.google.com/file/d/1J2DZpFucgHHPTYWyGNkY4h6v-tDJxJ81/view?usp=drive_link)
+
+- 상품관계
+- 할인계획상세
+- 청구할인기본
 
 [DB5](https://drive.google.com/file/d/11Lo8RPKwQiAqgQQ7gXxCKkWNhY9jlBI4/view?usp=drive_link)
 
+- 사용요율기본
+- 청구할인상세
+- 청구할인분류구성관계
+- 청구할인분류기본
+
 [DB6](https://drive.google.com/file/d/17iJtjBjEv5zafGK9IdJoVpRXKzEk3a-Q/view?usp=sharing)
 
+- 상품안내사항상세 > 상품약관???
+
+[Source](https://github.com/zoonny/clib2/tree/main/domain/prod/src/main/java/com/ktcloud/clib/domain/prod/vo)
 
 ## 예약 처리 프로세스와 데이터 모델에서 발생하고 있는 동시성 이슈의 해결 방안 제시
 
