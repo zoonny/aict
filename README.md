@@ -287,6 +287,101 @@ JWT는 현대 웹 애플리케이션에서 사용자 인증과 정보 교환에 
 
 [Source](https://github.com/zoonny/clib2/tree/main/domain/prod/src/main/java/com/ktcloud/clib/domain/prod/vo)
 
+
+A 고객사의 비즈니스 유연성과 성능을 고려하여 상품 관리 데이터 모델을 새롭게 설계할 때, 아래와 같은 주요 요소들을 반영하여 데이터 모델을 설계할 수 있습니다. 각 설계 요소에 대한 설명과 그 이유를 함께 제공합니다.
+
+### 1. **상품(Entity: Product)**
+   - **속성:**
+     - `ProductID` (Primary Key, UUID)
+     - `ProductName` (상품명)
+     - `Description` (상품 설명)
+     - `CategoryID` (Foreign Key, 카테고리)
+     - `Price` (가격)
+     - `Currency` (통화 코드)
+     - `Status` (상품 상태: 활성, 비활성 등)
+     - `CreatedDate` (생성일)
+     - `UpdatedDate` (수정일)
+
+   **설계 사유:**
+   - `ProductID`는 각 상품을 고유하게 식별할 수 있도록 UUID를 사용하여 글로벌 유일성을 보장합니다.
+   - `ProductName`, `Description`, `Price`와 같은 속성은 상품의 기본 정보를 담아내며, 가격은 다양한 통화를 지원하기 위해 `Currency` 속성을 추가합니다.
+   - `CategoryID`는 카테고리와의 관계를 나타내며, 이는 나중에 카테고리별 필터링을 용이하게 합니다.
+   - `Status`는 상품이 활성 상태인지 비활성 상태인지 관리하는 데 유용하며, `CreatedDate`와 `UpdatedDate`는 상품의 생성 및 수정 이력을 관리합니다.
+
+### 2. **카테고리(Entity: Category)**
+   - **속성:**
+     - `CategoryID` (Primary Key, UUID)
+     - `CategoryName` (카테고리명)
+     - `ParentCategoryID` (Foreign Key, 부모 카테고리)
+     - `CreatedDate` (생성일)
+     - `UpdatedDate` (수정일)
+
+   **설계 사유:**
+   - 카테고리는 상품의 분류를 관리하기 위한 구조로, 계층적 구조를 지원하기 위해 `ParentCategoryID`를 추가하여 다단계 카테고리를 지원합니다.
+   - 이로 인해 상품의 분류가 유연하게 변경될 수 있으며, 다양한 뷰나 필터링 옵션을 제공할 수 있습니다.
+
+### 3. **가격 이력(Entity: PriceHistory)**
+   - **속성:**
+     - `PriceHistoryID` (Primary Key, UUID)
+     - `ProductID` (Foreign Key)
+     - `Price` (가격)
+     - `Currency` (통화 코드)
+     - `EffectiveDate` (적용일자)
+     - `EndDate` (종료일자)
+
+   **설계 사유:**
+   - 비즈니스의 유연성을 확보하기 위해, 과거의 가격 이력을 추적할 수 있도록 `PriceHistory` 테이블을 설계합니다.
+   - `EffectiveDate`와 `EndDate`를 통해 특정 기간 동안 유효했던 가격을 추적할 수 있어, 가격 정책 변경에 따른 영향 분석이 가능합니다.
+
+### 4. **재고 관리(Entity: Inventory)**
+   - **속성:**
+     - `InventoryID` (Primary Key, UUID)
+     - `ProductID` (Foreign Key)
+     - `WarehouseID` (Foreign Key, 창고)
+     - `Quantity` (재고 수량)
+     - `ReservedQuantity` (예약된 수량)
+     - `LastUpdatedDate` (마지막 수정일)
+
+   **설계 사유:**
+   - 각 상품의 재고를 관리하기 위한 테이블로, 여러 창고에서의 재고를 관리할 수 있도록 `WarehouseID`를 포함합니다.
+   - `ReservedQuantity`를 통해 이미 예약된 수량을 관리하며, 실시간 재고 관리를 위해 `LastUpdatedDate`를 통해 마지막 업데이트 시점을 기록합니다.
+
+### 5. **상품 속성(Entity: ProductAttribute)**
+   - **속성:**
+     - `AttributeID` (Primary Key, UUID)
+     - `ProductID` (Foreign Key)
+     - `AttributeName` (속성명)
+     - `AttributeValue` (속성 값)
+     - `CreatedDate` (생성일)
+     - `UpdatedDate` (수정일)
+
+   **설계 사유:**
+   - 상품마다 다양한 속성을 가질 수 있도록 `ProductAttribute` 테이블을 설계합니다. 이는 비즈니스의 요구에 따라 상품의 특성을 유연하게 추가하거나 수정할 수 있도록 도와줍니다.
+
+### 6. **상품 리뷰(Entity: ProductReview)**
+   - **속성:**
+     - `ReviewID` (Primary Key, UUID)
+     - `ProductID` (Foreign Key)
+     - `CustomerID` (Foreign Key)
+     - `Rating` (평점)
+     - `Comment` (리뷰 내용)
+     - `CreatedDate` (생성일)
+
+   **설계 사유:**
+   - 고객의 피드백과 리뷰를 관리하기 위한 테이블로, 상품에 대한 고객의 평가와 리뷰 내용을 기록합니다.
+   - 이를 통해 고객의 반응을 분석하고 상품 개선에 활용할 수 있습니다.
+
+### 결론 및 요약
+이 데이터 모델은 고객사의 비즈니스 유연성과 성능을 극대화하기 위해 설계되었습니다. 각 엔티티는 특정 비즈니스 기능을 최적화하기 위해 설계되었으며, 모든 상품 관리 작업이 데이터베이스 수준에서 빠르고 효율적으로 수행될 수 있도록 고려했습니다. 또한, 유연한 속성 관리, 계층적 카테고리 구조, 가격 이력 추적, 재고 관리 등을 통해 비즈니스 요구 사항에 맞는 확장성과 유지 보수성을 갖추었습니다.
+
+---
+
+**Q1:** 이 데이터 모델이 고객사의 실시간 데이터 처리 요구 사항을 충족하기 위해 어떤 추가적인 고려 사항이 있을까요?
+
+**Q2:** 상품의 특정 속성에 따라 유연하게 가격을 책정할 수 있는 기능을 추가하려면 데이터 모델에 어떤 변경 사항이 필요할까요?
+
+**Q3:** 이 데이터 모델을 NoSQL 데이터베이스로 전환할 때의 장단점은 무엇일까요?
+
 ## 예약 처리 프로세스와 데이터 모델에서 발생하고 있는 동시성 이슈의 해결 방안 제시
 
 참고 URL
