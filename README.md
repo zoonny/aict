@@ -4,6 +4,8 @@
 참고 URL
 
 [MSA환경의 세션관리](http://web.joang.com:8083/books/msa-showcase/page/msa-session)
+[openid](https://hudi.blog/open-id)
+
 
 A 고객사의 시스템에서 채널 확대와 사용자 증가로 인해 발생할 수 있는 인증 및 세션 관리 문제를 해결하기 위해 다음과 같은 개선 방안을 제시합니다. 이 방안들은 시스템의 확장성과 보안성을 동시에 고려한 접근 방법입니다.
 
