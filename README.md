@@ -1299,3 +1299,6 @@ CQRS 패턴을 성공적으로 구현하기 위해서는 위와 같은 기술 �
 
 **Q3:** 마이크로서비스 아키텍처에서 헥사고날 아키텍처를 적용할 때 발생할 수 있는 문제점은 무엇이며, 이를 해결하기 위한 방법은
 
+<img width="662" alt="image" src="https://github.com/user-attachments/assets/aaeee433-660f-4c34-9fd6-1c8a3dbfcaa9">
+
+
