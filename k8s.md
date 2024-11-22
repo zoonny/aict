@@ -172,17 +172,6 @@ tigera-operator    tigera-operator-77f994b5bb-tpjvq           1/1     Running   
 ## Azure Disk 연결
 
 ```shell
-root@sidev-k8s-master:~# sudo lsblk
-sda       8:0    0   30G  0 disk
-├─sda1    8:1    0   29G  0 part /var/lib/kubelet/pods/beb1d5c4-3a9c-4213-ae8b-ffcd5f22ad64/volume-subpaths/tigera-ca-bundle/calico-node/1
-│                                /
-├─sda14   8:14   0    4M  0 part
-├─sda15   8:15   0  106M  0 part /boot/efi
-└─sda16 259:0    0  913M  0 part /boot
-sdb       8:16   0    4G  0 disk
-└─sdb1    8:17   0    4G  0 part /mnt
-sdc       8:32   0  128G  0 disk
-sr0      11:0    1  628K  0 rom
 root@sidev-k8s-master:~# sudo parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
 root@sidev-k8s-master:~# sudo mkfs.xfs /dev/sdc1
 meta-data=/dev/sdc1              isize=512    agcount=4, agsize=8388480 blks
@@ -219,3 +208,99 @@ sdb     0:0:0:1       8G
 sdc     1:0:0:0     128G
 └─sdc1              128G /data
 ```
+
+## k8s 적용
+
+### pod 구성/생성
+
+- pod 구성
+
+```yaml
+# nginx.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+```
+
+```shell
+root@sidev-k8s-master:~/k8s# kubectl apply -f nginx.yaml
+pod/web created
+
+root@sidev-k8s-master:~/k8s# kubectl get pod web -n default
+NAME   READY   STATUS              RESTARTS   AGE
+web    0/1     Running             0          11s
+
+root@sidev-k8s-master:~/k8s# kubectl describe pod web -n default
+Name:             web
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             sidev-k8s-worker1/10.18.0.70
+Start Time:       Fri, 22 Nov 2024 09:07:57 +0000
+Labels:           app=nginx
+Annotations:      cni.projectcalico.org/containerID: 33573fc490cd99954d2aa26fcf4b3712254d7941f6ac865c2ce01ed0ead307d1
+                  cni.projectcalico.org/podIP: 10.18.0.132/32
+                  cni.projectcalico.org/podIPs: 10.18.0.132/32
+Status:           Running
+IP:               10.18.0.132
+IPs:
+  IP:  10.18.0.132
+Containers:
+  nginx:
+    Container ID:   containerd://5593d3c007899dfce9d8582344dfe2e8a9091cea70d34ccae40c3dcfe7b15756
+    Image:          nginx:latest
+    Image ID:       docker.io/library/nginx@sha256:bc5eac5eafc581aeda3008b4b1f07ebba230de2f27d47767129a6a905c84f470
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Fri, 22 Nov 2024 09:08:10 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-cvgjf (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-cvgjf:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  41s   default-scheduler  Successfully assigned default/web to sidev-k8s-worker1
+  Normal  Pulling    41s   kubelet            Pulling image "nginx:latest"
+  Normal  Pulled     29s   kubelet            Successfully pulled image "nginx:latest" in 11.134s (11.134s including waiting). Image size: 72955450 bytes.
+  Normal  Created    29s   kubelet            Created container nginx
+  Normal  Started    28s   kubelet            Started container nginx
+
+root@sidev-k8s-master:~/k8s# kubectl delete pod web -n default
+root@sidev-k8s-master:~/k8s# kubectl delete pod web --grace-period 0 --force
+```
+
+- pod 생성 방법 3가지
+1. kubectl run
+kubectl run my-nginx --image=nginx
+2. kubectl create : 동일한 pod 존재시 에러
+kubectl create -f create-nginx.yaml
+3. kubectl apply : 동일한 pod 존재시 기존 config와 비교해서 수정된 부분만 업데이트
+kubectl apply -f create-nginx.yaml
