@@ -304,3 +304,8 @@ kubectl run my-nginx --image=nginx
 kubectl create -f create-nginx.yaml
 3. kubectl apply : 동일한 pod 존재시 기존 config와 비교해서 수정된 부분만 업데이트
 kubectl apply -f create-nginx.yaml
+
+
+- 참고
+https://pyrasis.com/jHLsAlwaysUpToDateKubernetes/Unit03/02
+
