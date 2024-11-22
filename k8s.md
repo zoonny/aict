@@ -172,6 +172,17 @@ tigera-operator    tigera-operator-77f994b5bb-tpjvq           1/1     Running   
 ## Azure Disk 연결
 
 ```shell
+root@sidev-k8s-master:~# sudo lsblk
+sda       8:0    0   30G  0 disk
+├─sda1    8:1    0   29G  0 part /var/lib/kubelet/pods/beb1d5c4-3a9c-4213-ae8b-ffcd5f22ad64/volume-subpaths/tigera-ca-bundle/calico-node/1
+│                                /
+├─sda14   8:14   0    4M  0 part
+├─sda15   8:15   0  106M  0 part /boot/efi
+└─sda16 259:0    0  913M  0 part /boot
+sdb       8:16   0    4G  0 disk
+└─sdb1    8:17   0    4G  0 part /mnt
+sdc       8:32   0  128G  0 disk
+sr0      11:0    1  628K  0 rom
 root@sidev-k8s-master:~# sudo parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
 root@sidev-k8s-master:~# sudo mkfs.xfs /dev/sdc1
 meta-data=/dev/sdc1              isize=512    agcount=4, agsize=8388480 blks
