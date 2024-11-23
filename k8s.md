@@ -309,3 +309,30 @@ kubectl apply -f create-nginx.yaml
 - 참고
 https://pyrasis.com/jHLsAlwaysUpToDateKubernetes/Unit03/02
 
+### k8s 대시보드 구성
+
+1. 쿠버네티스 대시보드 YAML 다운로드 및 배포
+공식 Kubernetes Dashboard YAML 파일을 배포합니다.
+```shell
+root@sidev-k8s-master:~# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+
+root@sidev-k8s-master:~# kubectl get all -n kubernetes-dashboard
+```
+
+
+
+
